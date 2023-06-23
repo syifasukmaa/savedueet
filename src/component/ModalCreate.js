@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 class ModalCreate extends React.Component {
@@ -43,6 +42,12 @@ class ModalCreate extends React.Component {
     };
 
     const fnTambahItem = this.props.action;
+    this.setState({
+      deskripsi: '',
+      nominal: 0,
+      tanggal: '',
+      category: this.state.category,
+    });
     fnTambahItem(Data);
     this.setState({
       show: false,
@@ -62,27 +67,55 @@ class ModalCreate extends React.Component {
           <Modal.Body>
             <div className="mb-3">
               <label className="form-label">Deskripsi</label>
-              <input type="text" className="form-control" placeholder="Masukkan deskripsi" name="deskripsi" value={this.state.deskripsi} onChange={this.handleChange} />
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Masukkan deskripsi"
+                name="deskripsi"
+                value={this.state.deskripsi}
+                onChange={this.handleChange}
+              />
             </div>
 
             <div className="mb-3">
               <label className="form-label">Nominal</label>
-              <input type="number" className="form-control" placeholder="Masukkan nominal" name="nominal" value={this.state.nominal} onChange={this.handleChange} />
+              <input
+                type="number"
+                className="form-control"
+                placeholder="Masukkan nominal"
+                name="nominal"
+                value={this.state.nominal}
+                onChange={this.handleChange}
+              />
             </div>
 
             <div className="mb-3">
               <label className="form-label">Tanggal</label>
-              <input type="date" className="form-control" placeholder="Masukkan deskripsi" name="tanggal" value={this.state.tanggal} onChange={this.handleChange} />
+              <input
+                type="date"
+                className="form-control"
+                placeholder="Masukkan deskripsi"
+                name="tanggal"
+                value={this.state.tanggal}
+                onChange={this.handleChange}
+              />
             </div>
 
             <div>
-              <input type="hidden" className="form-control" placeholder="Masukkan deskripsi" name="category" value={this.state.category} onChange={this.handleChange} />
+              <input
+                type="hidden"
+                className="form-control"
+                placeholder="Masukkan deskripsi"
+                name="category"
+                value={this.state.category}
+                onChange={this.handleChange}
+              />
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button className={this.props.variant} onClick={this.tambahItem}>
-              Save Changes
-            </Button>
+            <button className={this.props.variant} onClick={this.tambahItem}>
+              Save
+            </button>
           </Modal.Footer>
         </Modal>
       </>

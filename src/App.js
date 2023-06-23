@@ -20,7 +20,7 @@ class App extends React.Component {
     };
     this.tambahItem = this.tambahItem.bind(this);
     this.hapusLocalStorage = this.hapusLocalStorage.bind(this);
-    this.merubahRupiah = this.merubahRupiah.bind(this);
+    this.formatRibuan = this.formatRibuan.bind(this);
   }
 
   tambahItem(obj) {
@@ -31,6 +31,7 @@ class App extends React.Component {
     let dataUangOUT = newData.filter((item) => item.category === 'OUT');
     let nominalUangOut = dataUangOUT.map((item) => item.nominal);
     let jumlahUangOut = nominalUangOut.reduce((total, num) => total + num, 0);
+    // console.log(jumlahUangIn - jumlahUangOut)
     this.setState(
       {
         pemasukanUang: jumlahUangIn,
@@ -47,11 +48,22 @@ class App extends React.Component {
     );
   }
 
-  merubahRupiah(nominalUang) {
-    let nominal = nominalUang;
-    let reverse = nominal.toString().split('').reverse().join('');
-    let ribuan = reverse.match(/\d{1,3}/g);
-    return ribuan.join('.').split('').reverse().join('');
+  formatRibuan(angkaa) {
+    let number_string = angkaa.toString();
+    let split = number_string.split(',');
+    let sisa = split[0].length % 3;
+    let angka_hasil = split[0].substr(0, sisa);
+    let ribuan = split[0].substr(sisa).match(/.{3}/gi);
+
+    // tambahkan titik jika yang di input sudah menjadi angka ribuan
+    if (ribuan) {
+      let separator = sisa ? '.' : '';
+      angka_hasil += separator + ribuan.join('.');
+    }
+
+    angka_hasil =
+      split[1] !== undefined ? angka_hasil + ',' + split[1] : angka_hasil;
+    return angka_hasil;
   }
 
   hapusLocalStorage() {
@@ -95,10 +107,14 @@ class App extends React.Component {
               <h1 className="fw-bold">SAVEDUEET APP</h1>
               <hr className="w-75 mx-auto" />
               <h2 className="fw-bold">
-                Rp. {this.merubahRupiah(this.state.sisaUang)} ,-
+                Rp. {this.formatRibuan(this.state.sisaUang)} ,-
               </h2>
               <span className="title-md">
-                Sisa uang kamu tersisa {this.state.persentaseUang} % lagi
+                Sisa uang kamu tersisa{' '}
+                {this.state.persentaseUang === -Infinity
+                  ? -0
+                  : this.state.persentaseUang}
+                % lagi
               </span>
             </div>
           </div>
@@ -111,7 +127,7 @@ class App extends React.Component {
                 </div>
                 <span className="title-sm">Pemasukan</span>
                 <h3 className="fw-bold">
-                  Rp.{this.merubahRupiah(this.state.pemasukanUang)},-{' '}
+                  Rp. {this.formatRibuan(this.state.pemasukanUang)},-{' '}
                 </h3>
                 <div>
                   <span className="title text-ungu fw-bold">
@@ -128,7 +144,7 @@ class App extends React.Component {
                 </div>
                 <span className="title-sm">Pengeluaran</span>
                 <h3 className="fw-bold">
-                  Rp. {this.merubahRupiah(this.state.pengeluaranUang)},-
+                  Rp. {this.formatRibuan(this.state.pengeluaranUang)},-
                 </h3>
                 <div>
                   <span className="title text-ungu fw-bold">
@@ -205,7 +221,7 @@ class App extends React.Component {
                       sum.category === 'IN' ? 'text-money-in' : 'text-money-out'
                     }
                   >
-                    Rp. {this.merubahRupiah(sum.nominal)}
+                    Rp. {this.formatRibuan(sum.nominal)}
                   </h5>
                 </div>
               );
